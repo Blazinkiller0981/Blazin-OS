@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blazin OS</title>
+<style>
+:root{--accent:#70e8ff;--glass:rgba(15,19,28,.78);--glass2:rgba(9,12,18,.9);--border:rgba(255,255,255,.12);--muted:#9fa8b8;--text:#f7f8fb}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#07090d;color:var(--text)}button,input,textarea{font:inherit}button{color:inherit}
+#wall{position:fixed;inset:0;background:radial-gradient(circle at 50% 46%,rgba(120,93,145,.20),transparent 28%),radial-gradient(circle at 75% 30%,rgba(64,205,232,.09),transparent 25%),linear-gradient(145deg,#07090e,#14131d 48%,#06070a);background-size:cover;background-position:center;background-repeat:no-repeat;z-index:-2;overflow:hidden}
+#wall:before{content:"";position:absolute;inset:0;background-image:var(--bg-url,none);background-size:cover;background-position:center;background-repeat:no-repeat}
+#wall:after{content:"";position:absolute;inset:8% 10%;border:65px solid rgba(170,145,186,.085);border-radius:50%;transform:rotate(-18deg);box-shadow:0 0 0 22px rgba(255,255,255,.025),0 0 110px rgba(190,150,220,.1)}
+#wall::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#fff 0.7px,transparent .9px);background-size:170px 170px;opacity:.16;pointer-events:none}
+.topbar{position:fixed;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,rgba(6,8,13,.78),rgba(6,8,13,.18));backdrop-filter:blur(18px);z-index:5000}.brand{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700}.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent)}.status{font-size:12px;color:#dbe1eb;display:flex;gap:12px;align-items:center}
+#desktop{position:fixed;inset:46px 0 76px}.icons{position:absolute;top:16px;left:14px;display:grid;grid-template-columns:repeat(2,84px);gap:10px}.icon{border:0;background:transparent;border-radius:12px;padding:8px 4px;cursor:pointer;text-align:center}.icon:hover{background:rgba(255,255,255,.07)}.iconbox{width:46px;height:46px;margin:auto auto 6px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.055));border:1px solid var(--border);font-size:22px}.icon label{font-size:11px;text-shadow:0 2px 10px #000}
+#windows{position:absolute;inset:0;pointer-events:none}.window{position:absolute;pointer-events:auto;width:min(700px,calc(100vw - 30px));height:min(500px,calc(100vh - 112px));min-width:310px;min-height:210px;background:linear-gradient(180deg,rgba(22,26,36,.83),rgba(9,12,18,.79));border:1px solid rgba(255,255,255,.13);border-radius:16px;box-shadow:0 28px 80px rgba(0,0,0,.44);backdrop-filter:blur(24px) saturate(1.15);display:flex;flex-direction:column;overflow:hidden}.window.max{left:8px!important;top:8px!important;width:calc(100% - 16px)!important;height:calc(100% - 16px)!important}.window.min{display:none}.head{height:40px;flex:0 0 auto;display:flex;align-items:center;padding:0 11px;border-bottom:1px solid rgba(255,255,255,.08);cursor:grab;user-select:none}.head:active{cursor:grabbing}.title{display:flex;align-items:center;gap:8px;flex:1;font-size:12px;font-weight:600}.mini{width:25px;height:25px;border-radius:7px;background:rgba(255,255,255,.1);display:grid;place-items:center}.controls{display:flex;gap:7px}.controls button{width:11px;height:11px;border:0;border-radius:50%;padding:0;cursor:pointer}.minbtn{background:#ffd058}.maxbtn{background:#5fe17a}.closebtn{background:#ff6767}.body{flex:1;min-height:0;overflow:auto}
+.dock{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;border-radius:19px;background:rgba(12,15,21,.7);border:1px solid var(--border);backdrop-filter:blur(22px);box-shadow:0 18px 60px rgba(0,0,0,.34);z-index:5000;max-width:calc(100vw - 14px)}.dock button{position:relative;width:46px;height:46px;border:0;border-radius:13px;background:transparent;cursor:pointer;font-size:20px}.dock button:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}.dock button.active:after{content:"";position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--accent)}.launch{border-left:1px solid var(--border)!important;border-radius:0 12px 12px 0!important;margin-left:3px}
+.launcher{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);width:min(620px,calc(100vw - 24px));padding:16px;border-radius:18px;background:rgba(11,14,20,.93);border:1px solid var(--border);backdrop-filter:blur(25px);z-index:6000;box-shadow:0 24px 80px rgba(0,0,0,.5)}.launcher.hidden{display:none}.launchgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:9px}.launchitem{border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.04);padding:12px 8px;cursor:pointer;text-align:center}.launchitem:hover{background:rgba(255,255,255,.09)}.launchitem div{font-size:24px;margin-bottom:6px}
+.app{height:100%;display:flex;flex-direction:column}.toolbar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.07)}.toolbar button,.toolbar input,.content input,.content textarea{background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:#fff;outline:0;padding:8px 10px}.toolbar button,.primary{cursor:pointer;background:rgba(112,232,255,.13)!important;border-color:rgba(112,232,255,.35)!important}.content{flex:1;min-height:0;overflow:auto;padding:14px}.muted{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}.card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:13px}
+/* notes */.notes{height:100%;display:grid;grid-template-columns:200px 1fr}.noteside{border-right:1px solid rgba(255,255,255,.08);padding:10px;overflow:auto}.noterow{padding:10px;border-radius:10px;cursor:pointer;margin-bottom:4px}.noterow:hover,.noterow.active{background:rgba(255,255,255,.08)}.editor{display:flex;flex-direction:column;height:100%}.editor input{font-size:18px;font-weight:650;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.08);border-radius:0;padding:14px;outline:0;color:#fff}.editor textarea{flex:1;resize:none;background:transparent;border:0;outline:0;color:#fff;padding:14px;line-height:1.6}
+/* calculator */.calcwrap{max-width:350px;margin:auto}.calcdisplay{height:70px;display:flex;align-items:end;justify-content:flex-end;font-size:38px;padding:10px;overflow:hidden}.calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.calcgrid button{height:53px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.065);cursor:pointer;font-size:16px}.calcgrid button:hover{background:rgba(255,255,255,.12)}
+/* files */.crumbs{display:flex;align-items:center;gap:7px;overflow:hidden;white-space:nowrap}.crumb{background:transparent!important;border:0!important;padding:4px 5px!important;color:#dce4ed!important;cursor:pointer}.filegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px}.filecard{position:relative;min-height:118px;padding:12px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.075);cursor:pointer}.filecard:hover{background:rgba(255,255,255,.085)}.fileicon{font-size:31px;margin-bottom:10px}.filename{font-size:12px;font-weight:600;word-break:break-word}.filemenu{position:absolute;top:7px;right:7px;border:0;background:transparent;color:#9aa4b5;cursor:pointer}.empty{padding:35px;text-align:center}
+/* terminal */.terminal{height:100%;padding:14px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#05070a;overflow:auto}.termrow{margin:4px 0}.prompt{color:var(--accent)}.termline{display:flex;gap:5px}.terminput{flex:1;border:0!important;padding:0!important;background:transparent!important;font:inherit}.terminput:focus{outline:0}
+/* modal */.modal{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.3);z-index:10}.modal.hidden{display:none}.modalbox{width:min(360px,calc(100% - 30px));padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--glass2);box-shadow:0 20px 60px rgba(0,0,0,.45)}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.actions button{padding:8px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);cursor:pointer}
+@media(max-width:700px){.status #net{display:none}.icons{grid-template-columns:1fr 1fr}.window{width:calc(100vw - 16px)!important;left:8px!important}.notes{grid-template-columns:125px 1fr}.dock button{width:39px;height:39px;font-size:18px}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:430px){.icons{grid-template-columns:1fr}.dock button{width:35px;height:35px}.launchgrid{grid-template-columns:repeat(3,1fr)}}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="wall"></div>
+<header class="topbar"><div class="brand"><span class="dot"></span>Blazin OS</div><div class="status"><span id="net">● Online</span><span id="time">--:--</span></div></header>
+<main id="desktop"><div id="desktopIcons" class="icons"></div><div id="windows"></div></main>
+<nav id="dock" class="dock"></nav>
+<section id="launcher" class="launcher hidden"></section>
+
+<script>
+(() => {
+  'use strict';
+  const APPS={notes:{name:'Notes',icon:'▤'},calculator:{name:'Calculator',icon:'⊞'},files:{name:'Files',icon:'▱'},terminal:{name:'Terminal',icon:'>_'},calendar:{name:'Calendar',icon:'▦'},settings:{name:'Settings',icon:'⚙'},youtube:{name:'YouTube Music',icon:'♫'},game:{name:'Blazin Arena',icon:'◆'},about:{name:'About',icon:'?'}};
+  const desktopApps=['notes','calculator','files','youtube','game','settings'];
+  const dockApps=['notes','calculator','files','youtube','game','terminal','calendar','settings'];
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const clone=o=>JSON.parse(JSON.stringify(o));
+  const defaultFS={type:'folder',name:'Blazin Drive',children:{Documents:{type:'folder',name:'Documents',children:{}},Downloads:{type:'folder',name:'Downloads',children:{}},Pictures:{type:'folder',name:'Pictures',children:{}},'Welcome.txt':{type:'file',name:'Welcome.txt',content:'Welcome to Blazin OS!\n\nThis is your first file.\n\nUse the Files app to create folders and text files.'}}};
+  let notes=JSON.parse(localStorage.getItem('blazin_notes')||'null')||[{title:'Welcome',text:'Welcome to Blazin OS.\n\nYour notes are saved automatically.'}];
+  let fs=JSON.parse(localStorage.getItem('blazin_fs')||'null')||clone(defaultFS);
+  let fsPath=[];let windows=new Map();let z=10;let activeNote=0;
+  const persist=()=>localStorage.setItem('blazin_fs',JSON.stringify(fs));
+  const persistNotes=()=>localStorage.setItem('blazin_notes',JSON.stringify(notes));
+  const nodeAt=path=>path.reduce((n,p)=>n?.children?.[p]||null,fs);
+  const current=()=>nodeAt(fsPath)||fs;
+  const unique=(parent,name)=>{let base=name||'Untitled',n=base,i=2;while(parent.children[n]){let dot=base.lastIndexOf('.');n=dot>0?base.slice(0,dot)+' ('+i+')'+base.slice(dot):base+' ('+i+')';i++;}return n};
+  const openFileEditor=(name)=>{
+    const n=current().children[name];if(!n||n.type!=='file')return;
+    const id='file-'+Date.now()+Math.random();
+    const w=createWindowShell(id,'📄 '+name,620,430);w.querySelector('.body').innerHTML='<div class="app"><textarea id="fileEditor" style="flex:1;resize:none;margin:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#fff;padding:12px;outline:0;line-height:1.6"></textarea><div class="toolbar" style="justify-content:flex-end"><button class="primary" id="saveFile">Save</button></div></div>';w.querySelector('#fileEditor').value=n.content||'';w.querySelector('#saveFile').onclick=()=>{n.content=w.querySelector('#fileEditor').value;persist()};
+  };
+  function createWindowShell(id,title,width=650,height=450){
+    const w=document.createElement('section');w.className='window';w.dataset.id=id;w.style.width=Math.min(width,innerWidth-16)+'px';w.style.height=Math.min(height,innerHeight-112)+'px';w.style.left=Math.max(8,Math.min(innerWidth-parseInt(w.style.width)-8,70+windows.size*26))+'px';w.style.top=Math.max(54,Math.min(innerHeight-parseInt(w.style.height)-82,58+windows.size*20))+'px';w.style.zIndex=++z;
+    const icon=title.split(' ')[0];w.innerHTML='<div class="head"><div class="title"><span class="mini">'+esc(icon)+'</span><span>'+esc(title.replace(icon+' ',''))+'</span></div><div class="controls"><button class="minbtn"></button><button class="maxbtn"></button><button class="closebtn"></button></div></div><div class="body"></div>';
+    $('#windows').appendChild(w);windows.set(id,w);wireWindow(w);focus(w);return w;
+  }
+  function focus(w){z++;w.style.zIndex=z;updateDock()}
+  function wireWindow(w){
+    w.addEventListener('pointerdown',()=>focus(w));
+    const h=w.querySelector('.head');let drag=null;
+    h.addEventListener('pointerdown',e=>{if(e.target.closest('.controls')||w.classList.contains('max'))return;drag={x:e.clientX,y:e.clientY,l:w.offsetLeft,t:w.offsetTop};h.setPointerCapture(e.pointerId)});
+    h.addEventListener('pointermove',e=>{if(!drag)return;w.style.left=Math.max(4,drag.l+e.clientX-drag.x)+'px';w.style.top=Math.max(46,drag.t+e.clientY-drag.y)+'px'});
+    h.addEventListener('pointerup',()=>drag=null);h.addEventListener('pointercancel',()=>drag=null);
+    w.querySelector('.closebtn').onclick=()=>{windows.delete(w.dataset.id);w.remove();updateDock()};
+    w.querySelector('.minbtn').onclick=()=>{w.classList.add('min');updateDock()};
+    w.querySelector('.maxbtn').onclick=()=>toggleMax(w);
+    h.addEventListener('dblclick',e=>{if(!e.target.closest('.controls'))toggleMax(w)});
+  }
+  function toggleMax(w){if(!w.classList.contains('max')){w.dataset.l=w.style.left;w.dataset.t=w.style.top;w.dataset.w=w.style.width;w.dataset.h=w.style.height;w.classList.add('max')}else{w.classList.remove('max');w.style.left=w.dataset.l||'70px';w.style.top=w.dataset.t||'58px';w.style.width=w.dataset.w||'650px';w.style.height=w.dataset.h||'450px'} }
+  function updateDock(){ $$('#dock [data-app]').forEach(b=>{const w=windows.get(b.dataset.app);b.classList.toggle('active',!!w&&!w.classList.contains('min'))}) }
+  function openApp(id){$('#launcher').classList.add('hidden');let w=windows.get(id);if(w){w.classList.remove('min');focus(w);return} renderApp(id)}
+  function renderDesktop(){
+    $('#desktopIcons').innerHTML=desktopApps.map(id=>'<button type="button" class="icon" data-open="'+id+'"><div class="iconbox">'+APPS[id].icon+'</div><label>'+APPS[id].name+'</label></button>').join('');
+    $('#dock').innerHTML=dockApps.map(id=>'<button type="button" title="'+APPS[id].name+'" data-app="'+id+'" data-open="'+id+'">'+APPS[id].icon+'</button>').join('')+'<button type="button" class="launch" id="launchBtn" title="Apps">⌘</button>';
+    $('#desktopIcons').querySelectorAll('[data-open]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openApp(btn.dataset.open)}));
+    $('#dock').querySelectorAll('[data-open]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();openApp(btn.dataset.open)}));
+    $('#launchBtn').onclick=()=>{$('#launcher').classList.toggle('hidden');renderLauncher('')};
+    renderLauncher('');
+  }
+  function loadCustomBackground(){
+    const wall=$('#wall');
+    const candidates=['bg.png','bg.jpg','bg.jpeg','bg.webp','bg.gif'];
+    let i=0;
+    const tryNext=()=>{
+      if(i>=candidates.length)return;
+      const img=new Image();
+      const src=candidates[i++];
+      img.onload=()=>wall.style.setProperty('--bg-url','url("'+src+'")');
+      img.onerror=tryNext;
+      img.src=src+'?v='+Date.now();
+    };
+    tryNext();
+  }
+  function renderLauncher(q){let html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><b>Applications</b><span class="muted">Blazin OS</span></div><div class="launchgrid">';Object.entries(APPS).filter(([id,a])=>(id+' '+a.name).toLowerCase().includes(q.toLowerCase())).forEach(([id,a])=>html+='<button class="launchitem" data-open="'+id+'"><div>'+a.icon+'</div><small>'+a.name+'</small></button>');html+='</div>';$('#launcher').innerHTML=html}
+  function renderApp(id){
+    if(id==='notes')return renderNotes();if(id==='calculator')return renderCalc();if(id==='files')return renderFiles();if(id==='terminal')return renderTerminal();if(id==='calendar')return renderCalendar();if(id==='settings')return renderSettings();if(id==='youtube')return renderYoutube();if(id==='game')return renderGame();return renderAbout();
+  }
+  function renderNotes(){const w=createWindowShell('notes','▤ Notes',760,500);w.querySelector('.body').innerHTML='<div class="notes"><aside class="noteside"><button class="primary" id="newNote" style="width:100%;margin-bottom:8px">+ New note</button><div id="noteList"></div></aside><section class="editor"><input id="noteTitle" placeholder="Note title"><textarea id="noteText" placeholder="Start typing..."></textarea></section></div>';const draw=()=>{$('#noteList',w).innerHTML=notes.map((n,i)=>'<div class="noterow '+(i===activeNote?'active':'')+'" data-note="'+i+'"><b>'+esc(n.title||'Untitled')+'</b><div class="muted">'+esc((n.text||'').slice(0,32))+'</div></div>').join('');w.querySelector('#noteTitle').value=notes[activeNote]?.title||'Untitled';w.querySelector('#noteText').value=notes[activeNote]?.text||''};const list=w.querySelector('#noteList');w.querySelector('#newNote').onclick=()=>{notes.unshift({title:'Untitled',text:''});activeNote=0;persistNotes();draw()};list.onclick=e=>{const r=e.target.closest('[data-note]');if(!r)return;activeNote=+r.dataset.note;draw()};w.querySelector('#noteTitle').oninput=e=>{notes[activeNote].title=e.target.value;persistNotes();draw()};w.querySelector('#noteText').oninput=e=>{notes[activeNote].text=e.target.value;persistNotes();};draw();return w}
+  function renderCalc(){const w=createWindowShell('calculator','⊞ Calculator',390,520);w.querySelector('.body').innerHTML='<div class="content"><div class="calcwrap"><div class="card"><div class="calcdisplay" id="display">0</div><div class="calcgrid">'+['C','⌫','%','÷','7','8','9','×','4','5','6','−','1','2','3','+','±','0','.','='].map(k=>'<button data-k="'+k+'">'+k+'</button>').join('')+'</div></div></div></div>';let display='0',a=null,op=null,just=false;const d=w.querySelector('#display');const refresh=()=>d.textContent=display;w.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(/\d/.test(k)||k==='.'){if(just||display==='0'){display=k==='.'?'0.':k;just=false}else if(k!=='.'||!display.includes('.'))display+=k}else if(k==='C'){display='0';a=null;op=null;just=false}else if(k==='⌫'){display=display.length>1?display.slice(0,-1):'0'}else if(k==='±'){display=String(-parseFloat(display)||0)}else if(k==='%'){display=String(parseFloat(display)/100)}else if(['+','−','×','÷'].includes(k)){a=parseFloat(display);op=k;just=true}else if(k==='='&&a!==null){let b=parseFloat(display),r=op==='+'?a+b:op==='−'?a-b:op==='×'?a*b:a/b;display=String(Number.isFinite(r)?r:'Error');a=null;op=null;just=true}refresh()});return w}
+  function renderFiles(){const w=createWindowShell('files','▱ Files',760,520);w.querySelector('.body').innerHTML='<div class="app"><div class="toolbar"><button id="back">←</button><div class="crumbs" id="crumbs" style="flex:1"></div><button id="newFolder">New folder</button><button class="primary" id="newText">New file</button></div><div class="content"><div class="muted" id="fileInfo" style="margin-bottom:12px"></div><div id="fileGrid" class="filegrid"></div></div></div>';const grid=w.querySelector('#fileGrid'),crumbs=w.querySelector('#crumbs'),info=w.querySelector('#fileInfo');const draw=()=>{const dir=current();const names=Object.values(dir.children||{}).sort((a,b)=>a.type!==b.type?(a.type==='folder'?-1:1):a.name.localeCompare(b.name));crumbs.innerHTML='<button class="crumb" data-depth="0">Blazin Drive</button>'+fsPath.map((p,i)=>'<span class="muted">/</span><button class="crumb" data-depth="'+(i+1)+'">'+esc(p)+'</button>').join('');info.textContent=(fsPath.length?fsPath.join(' / '):'Blazin Drive')+' · '+names.length+' item'+(names.length===1?'':'s');grid.innerHTML=names.length?names.map(n=>'<div class="filecard" data-name="'+esc(n.name)+'"><button class="filemenu" title="Actions">•••</button><div class="fileicon">'+(n.type==='folder'?'📁':'📄')+'</div><div class="filename">'+esc(n.name)+'</div><div class="muted">'+(n.type==='folder'?'Folder':'Text file')+'</div></div>').join(''):'<div class="empty muted">This folder is empty.<br><br>Create a folder or text file.</div>'};
+    w.querySelector('#back').onclick=()=>{if(fsPath.length){fsPath.pop();draw()}};w.querySelector('#newFolder').onclick=()=>{const n=prompt('Folder name','New Folder');if(n){const name=unique(current(),n.trim());current().children[name]={type:'folder',name,children:{}};persist();draw()}};w.querySelector('#newText').onclick=()=>{const n=prompt('File name','New File.txt');if(n){const name=unique(current(),n.trim());current().children[name]={type:'file',name,content:''};persist();draw()}};crumbs.onclick=e=>{const c=e.target.closest('[data-depth]');if(c){fsPath=fsPath.slice(0,+c.dataset.depth);draw()}};grid.onclick=e=>{const card=e.target.closest('.filecard');if(!card)return;const name=card.dataset.name,node=current().children[name];if(e.target.closest('.filemenu')){const action=prompt('Type rename or delete','rename');if(action==='rename'){const nn=prompt('New name',name);if(nn&&(!current().children[nn]||nn===name)){const real=current().children[name];delete current().children[name];real.name=nn.trim();current().children[real.name]=real;persist()}}else if(action==='delete'&&confirm('Delete '+name+'?')){delete current().children[name];persist()}draw();return}if(node.type==='folder'){fsPath.push(name);draw()}else openFileEditor(name)};draw();return w}
+  function renderTerminal(){const w=createWindowShell('terminal','>_ Terminal',640,430);w.querySelector('.body').innerHTML='<div class="terminal"><div>Blazin Terminal 1.0</div><div class="muted" style="margin:6px 0 12px">Type <b>help</b> for commands.</div><div id="out"></div><div class="termline"><span class="prompt">blazin@os:~$</span><input id="term" class="terminput" autocomplete="off"></div></div>';const input=w.querySelector('#term'),out=w.querySelector('#out');input.focus();input.onkeydown=e=>{if(e.key!=='Enter')return;const c=input.value.trim();if(!c)return;out.insertAdjacentHTML('beforeend','<div class="termrow"><span class="prompt">blazin@os:~$</span> '+esc(c)+'</div>');let r='';if(c==='help')r='help | clear | date | whoami | apps | echo <text>';else if(c==='date')r=new Date().toString();else if(c==='whoami')r='user@blazin';else if(c==='apps')r=Object.values(APPS).map(a=>a.name).join(', ');else if(c==='clear'){out.innerHTML='';input.value='';return}else if(c.startsWith('echo '))r=c.slice(5);else r='command not found: '+c;out.insertAdjacentHTML('beforeend','<div class="termrow">'+esc(r)+'</div>');input.value='';w.querySelector('.body').scrollTop=w.querySelector('.body').scrollHeight};return w}
+
+  function renderYoutube(){
+    const w=createWindowShell('youtube','♫ Blazin Music',820,560);
+    w.querySelector('.body').innerHTML=`<div class="app">
+      <div class="toolbar"><input id="ytq" placeholder="Search tracks, artists, albums..." style="flex:1"><button class="primary" id="ytsearch">Search</button></div>
+      <div class="content" style="padding:0;display:grid;grid-template-columns:1fr 310px;min-height:0">
+        <div style="min-width:0;overflow:auto;padding:14px">
+          <div class="card" style="margin-bottom:12px"><b>Blazin Music</b><p class="muted">Music lives inside Blazin OS now. Pick a track and it plays in this window.</p></div>
+          <div id="ytresults" class="grid"></div>
+        </div>
+        <aside style="border-left:1px solid rgba(255,255,255,.08);padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div class="muted">Now playing</div>
+          <div class="card" id="nowPlaying"><div style="font-size:42px">♫</div><b>No track selected</b><p class="muted">Choose a track from the library.</p></div>
+          <audio id="musicAudio" controls style="width:100%"></audio>
+          <div class="muted">Tip: Add your own MP3/OGG files by choosing a local track below.</div>
+          <input id="localMusic" type="file" accept="audio/*" multiple>
+          <div id="localList"></div>
+        </aside>
+      </div>
+    </div>`;
+    const q=w.querySelector('#ytq'),results=w.querySelector('#ytresults'),now=w.querySelector('#nowPlaying'),audio=w.querySelector('#musicAudio'),localInput=w.querySelector('#localMusic'),localList=w.querySelector('#localList');
+    const library=[
+      {title:'Midnight Drive',artist:'Blazin Radio',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+      {title:'Neon Skies',artist:'Blazin Radio',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+      {title:'Afterburn',artist:'Blazin Radio',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
+      {title:'Night Runner',artist:'Blazin Radio',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'}
+    ];
+    const play=(t)=>{now.innerHTML=`<div style="font-size:42px;margin-bottom:8px">♫</div><b>${esc(t.title)}</b><p class="muted">${esc(t.artist)}</p>`;audio.src=t.url;audio.play().catch(()=>{});};
+    const draw=(filter='')=>{const list=library.filter(t=>(t.title+' '+t.artist).toLowerCase().includes(filter.toLowerCase()));results.innerHTML=list.map((t,i)=>`<button class="card" data-track="${i}" style="text-align:left;border:1px solid rgba(255,255,255,.08);color:#fff;cursor:pointer"><div style="font-size:28px;margin-bottom:7px">♫</div><b>${esc(t.title)}</b><div class="muted">${esc(t.artist)}</div></button>`).join('')||'<div class="muted">No tracks found.</div>';results.querySelectorAll('[data-track]').forEach((b,idx)=>b.onclick=()=>play(list[idx]));};
+    q.oninput=()=>draw(q.value);q.onkeydown=e=>{if(e.key==='Enter')draw(q.value)};w.querySelector('#ytsearch').onclick=()=>draw(q.value);draw();
+    localInput.onchange=()=>{localList.innerHTML='';[...localInput.files].forEach(f=>{const u=URL.createObjectURL(f);const b=document.createElement('button');b.className='card';b.style.textAlign='left';b.innerHTML='<b>'+esc(f.name)+'</b><div class="muted">Local audio</div>';b.onclick=()=>play({title:f.name,artist:'Local file',url:u});localList.appendChild(b)})};
+    return w;
+  }
+  function renderGame(){
+    const w=createWindowShell('game','◆ Blazin Arena',820,560);
+    w.querySelector('.body').innerHTML=`<div class="app">
+      <div class="toolbar"><span class="muted" id="gameStatus">WASD move · Mouse aim · Click shoot · Shift dash</span><button class="primary" id="gameStart">Start Arena</button></div>
+      <div class="content" style="display:grid;place-items:center;background:rgba(0,0,0,.18);position:relative">
+        <canvas id="gameCanvas" width="760" height="430" style="width:min(100%,760px);height:auto;background:radial-gradient(circle at 50% 45%,#141b2b,#06090f);border:1px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 15px 45px rgba(0,0,0,.35)"></canvas>
+      </div>
+    </div>`;
+    const c=w.querySelector('#gameCanvas'),ctx=c.getContext('2d'),start=w.querySelector('#gameStart'),status=w.querySelector('#gameStatus');
+    let running=false,raf=0,keys={},mouse={x:c.width/2,y:c.height/2,down:false},player,enemies=[],bullets=[],particles=[],score=0,level=1,xp=0,nextXp=100,spawnTimer=0,last=0,shootCd=0,dashCd=0,inv=0;
+    const reset=()=>{player={x:c.width/2,y:c.height/2,r:16,hp:100,maxHp:100,speed:3.3,angle:0,dash:0};enemies=[];bullets=[];particles=[];score=0;level=1;xp=0;nextXp=100;spawnTimer=0;shootCd=0;dashCd=0;inv=0;};
+    const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y); const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+    const burst=(x,y,n,life=380)=>{for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=Math.random()*3+1;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life,max:life,r:Math.random()*2+1})}};
+    const spawnEnemy=()=>{const side=Math.floor(Math.random()*4);let x=0,y=0;if(side===0){x=Math.random()*c.width;y=-25}else if(side===1){x=c.width+25;y=Math.random()*c.height}else if(side===2){x=Math.random()*c.width;y=c.height+25}else{x=-25;y=Math.random()*c.height};const elite=Math.random()<Math.min(.12,.03+level*.006);enemies.push({x,y,r:elite?18:13,hp:elite?70+level*8:28+level*4,max:elite?70+level*8:28+level*4,speed:(elite?1.05:1.45)+level*.03,color:elite?'#ffb347':'#ff5f78'});};
+    const shoot=()=>{if(shootCd>0)return;const a=player.angle;bullets.push({x:player.x+Math.cos(a)*20,y:player.y+Math.sin(a)*20,vx:Math.cos(a)*8,vy:Math.sin(a)*8,r:4,life:900});shootCd=120};
+    const dash=()=>{if(dashCd>0)return;let dx=(keys.d?1:0)-(keys.a?1:0),dy=(keys.s?1:0)-(keys.w?1:0);if(!dx&&!dy){dx=Math.cos(player.angle);dy=Math.sin(player.angle)}const l=Math.hypot(dx,dy)||1;player.x=clamp(player.x+dx/l*95,player.r,c.width-player.r);player.y=clamp(player.y+dy/l*95,player.r,c.height-player.r);dashCd=1400;inv=280;burst(player.x,player.y,22,500)};
+    const levelUp=()=>{level++;xp-=nextXp;nextXp=Math.floor(nextXp*1.28);player.maxHp+=12;player.hp=player.maxHp;player.speed+=.12;burst(player.x,player.y,35,700)};
+    const draw=()=>{ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='rgba(255,255,255,.025)';for(let x=0;x<c.width;x+=38)ctx.fillRect(x,0,1,c.height);for(let y=0;y<c.height;y+=38)ctx.fillRect(0,y,c.width,1);
+      particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle='#70e8ff';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
+      bullets.forEach(b=>{ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill()});
+      enemies.forEach(e=>{ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.arc(e.x+4,e.y+5,e.r,0,Math.PI*2);ctx.fill();ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#201018';ctx.beginPath();ctx.arc(e.x-4,e.y-2,2.2,0,Math.PI*2);ctx.arc(e.x+4,e.y-2,2.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#222';ctx.fillRect(e.x-e.r,e.y-e.r-7,e.r*2,3);ctx.fillStyle='#68ef8a';ctx.fillRect(e.x-e.r,e.y-e.r-7,e.r*2*(e.hp/e.max),3)});
+      ctx.save();ctx.translate(player.x,player.y);ctx.rotate(player.angle);ctx.globalAlpha=inv>0?.55:1;ctx.fillStyle='rgba(0,0,0,.4)';ctx.beginPath();ctx.arc(3,4,player.r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#70e8ff';ctx.beginPath();ctx.arc(0,0,player.r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#172130';ctx.fillRect(5,-4,18,8);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(3,-6,2.5,0,Math.PI*2);ctx.arc(3,6,2.5,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.fillStyle='rgba(8,11,17,.78)';ctx.fillRect(12,12,215,52);ctx.fillStyle='#fff';ctx.font='bold 14px system-ui';ctx.fillText('Score '+score,24,33);ctx.fillStyle='#70e8ff';ctx.fillText('Level '+level,130,33);ctx.fillStyle='#333';ctx.fillRect(24,44,180,8);ctx.fillStyle='#68ef8a';ctx.fillRect(24,44,180*(player.hp/player.maxHp),8);ctx.fillStyle='#fff';ctx.font='11px system-ui';ctx.fillText(Math.max(0,Math.floor(player.hp))+'/'+player.maxHp,24,61);
+      ctx.fillStyle='rgba(8,11,17,.78)';ctx.fillRect(c.width-188,12,176,44);ctx.fillStyle='#fff';ctx.fillText('XP '+xp+'/'+nextXp,c.width-176,31);ctx.fillStyle='#3d4554';ctx.fillRect(c.width-176,38,152,7);ctx.fillStyle='#c17cff';ctx.fillRect(c.width-176,38,152*(xp/nextXp),7);
+      if(!running){ctx.fillStyle='rgba(0,0,0,.42)';ctx.fillRect(0,0,c.width,c.height);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='700 28px system-ui';ctx.fillText(score?'GAME OVER':'BLAZIN ARENA',c.width/2,c.height/2-10);ctx.font='13px system-ui';ctx.fillText(score?'Press Restart to run it back':'WASD + mouse to survive',c.width/2,c.height/2+18);ctx.textAlign='left'}
+    };
+    const loop=t=>{if(!running)return;const dt=Math.min(32,t-last);last=t;shootCd-=dt;dashCd-=dt;inv-=dt;spawnTimer+=dt;let dx=(keys.d?1:0)-(keys.a?1:0),dy=(keys.s?1:0)-(keys.w?1:0);const l=Math.hypot(dx,dy)||1;if(dx||dy){player.x=clamp(player.x+dx/l*player.speed*(dt/16),player.r,c.width-player.r);player.y=clamp(player.y+dy/l*player.speed*(dt/16),player.r,c.height-player.r)} if(keys.shift){keys.shift=false;dash()};player.angle=Math.atan2(mouse.y-player.y,mouse.x-player.x);if(mouse.down)shoot();if(spawnTimer>Math.max(320,900-level*45)){spawnEnemy();if(level>4&&Math.random()<.18)spawnEnemy();spawnTimer=0}
+      bullets.forEach(b=>{b.x+=b.vx*(dt/16);b.y+=b.vy*(dt/16);b.life-=dt});bullets=bullets.filter(b=>b.life>0&&b.x>-30&&b.x<c.width+30&&b.y>-30&&b.y<c.height+30);
+      enemies.forEach(e=>{const a=Math.atan2(player.y-e.y,player.x-e.x);e.x+=Math.cos(a)*e.speed*(dt/16);e.y+=Math.sin(a)*e.speed*(dt/16)});
+      bullets.forEach(b=>{for(const e of enemies){if(dist(b,e)<b.r+e.r){e.hp-=22+level*2;b.life=0;burst(b.x,b.y,5,280);if(e.hp<=0){e.dead=true;score+=e.r>15?40:15;xp+=e.r>15?28:12;burst(e.x,e.y,e.r>15?18:10,450)}}}});enemies=enemies.filter(e=>!e.dead);
+      enemies.forEach(e=>{if(dist(player,e)<player.r+e.r&&inv<=0){player.hp-=e.r>15?24:12;inv=500;burst(player.x,player.y,10,300)}});particles.forEach(p=>{p.x+=p.vx*(dt/16);p.y+=p.vy*(dt/16);p.life-=dt;p.vx*=.98;p.vy*=.98});particles=particles.filter(p=>p.life>0);while(xp>=nextXp)levelUp();if(player.hp<=0){running=false;status.textContent='You reached level '+level+' with '+score+' points';start.textContent='Restart'}draw();raf=requestAnimationFrame(loop)};
+    const pos=e=>{const r=c.getBoundingClientRect();mouse.x=(e.clientX-r.left)*(c.width/r.width);mouse.y=(e.clientY-r.top)*(c.height/r.height)};
+    c.addEventListener('mousemove',pos);c.addEventListener('mousedown',e=>{pos(e);mouse.down=true});window.addEventListener('mouseup',()=>mouse.down=false);
+    window.addEventListener('keydown',e=>{if(['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Shift'].includes(e.key)){const k=e.key.startsWith('Arrow')?({ArrowUp:'w',ArrowDown:'s',ArrowLeft:'a',ArrowRight:'d'}[e.key]):e.key.toLowerCase();keys[k]=true;e.preventDefault()}});window.addEventListener('keyup',e=>{const k=e.key.startsWith('Arrow')?({ArrowUp:'w',ArrowDown:'s',ArrowLeft:'a',ArrowRight:'d'}[e.key]):e.key.toLowerCase();keys[k]=false});
+    start.onclick=()=>{cancelAnimationFrame(raf);reset();running=true;status.textContent='Survive the waves. Level up and dash through danger.';start.textContent='Restart';last=performance.now();draw();raf=requestAnimationFrame(loop)};reset();draw();return w;
+  }
+  function renderCalendar(){const w=createWindowShell('calendar','▦ Calendar',650,430);const d=new Date();w.querySelector('.body').innerHTML='<div class="content"><div class="grid"><div class="card"><div class="muted">Today</div><h2>'+d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})+'</h2><p class="muted">No events yet.</p></div><div class="card"><div class="muted">Blazin OS</div><h3>Build something cool.</h3><p class="muted">This calendar is ready to grow.</p></div></div></div>';return w}
+  function renderSettings(){const w=createWindowShell('settings','⚙ Settings',560,400);w.querySelector('.body').innerHTML='<div class="content"><div class="card"><b>Accent color</b><p class="muted">Change the OS highlight color.</p><input type="color" id="color" value="'+getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()+'"></div><div class="card" style="margin-top:10px"><b>Reset filing system</b><p class="muted">Deletes your saved virtual files.</p><button id="resetFS">Reset files</button></div></div>';w.querySelector('#color').oninput=e=>document.documentElement.style.setProperty('--accent',e.target.value);w.querySelector('#resetFS').onclick=()=>{if(confirm('Reset Blazin Drive?')){fs=clone(defaultFS);fsPath=[];persist();alert('Blazin Drive reset.')}};return w}
+  function renderAbout(){const w=createWindowShell('about','? About Blazin OS',500,320);w.querySelector('.body').innerHTML='<div class="content"><h2>Blazin OS</h2><p class="muted">A browser-based desktop operating system concept.</p><div class="card"><b>Built-in apps</b><p class="muted">Notes, Calculator, Files, Terminal, Calendar and Settings.</p></div></div>';return w}
+  document.addEventListener('click',e=>{const o=e.target.closest('[data-open]');if(o)openApp(o.dataset.open)});
+  setInterval(()=>$('#time').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),1000);$('#time').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  renderDesktop();
+  loadCustomBackground();
+  document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.code==='Space'){e.preventDefault();$('#launcher').classList.toggle('hidden');renderLauncher('')}});
+})();
+</script>
+</body>
+</html>
