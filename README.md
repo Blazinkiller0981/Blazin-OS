@@ -1,106 +1,59 @@
-# Blazin-OS
+# Blazin OS
 
-# A browser-based desktop operating system.
+Blazin OS is a browser-based desktop operating system built as a single HTML file. It runs directly in a web browser and includes a full desktop interface with windows, a dock, desktop shortcuts, a launcher, customizable backgrounds, and built-in applications.
 
-# Features:
+## Features
 
-# Icons, draggable windows, dock, and app launcher (Ctrl+Space)
+Blazin OS includes a functional Notes app for creating and editing notes. Notes are saved automatically in the browser, so they remain available after closing and reopening the OS.
 
-# Files and notes saved to `localStorage`
+The Calculator app handles normal arithmetic operations including addition, subtraction, multiplication, division, percentages, decimals, sign changes, clearing, and backspace.
 
-# Built-in Apps:
+The Files app provides a virtual filing system called Blazin Drive. It includes folders such as Documents, Downloads, and Pictures, and lets you create folders and text files, move through folders, rename items, delete items, and open text files for editing. The virtual filesystem is saved using browser storage.
 
-# Notes 
+The Terminal provides a simple command-line interface inside the OS. It currently supports commands such as `help`, `clear`, `date`, `whoami`, `apps`, and `echo`, and is designed as a base for adding more terminal functionality later.
 
-# Calculator 
+The Calendar app shows the current date and provides a basic place for future calendar functionality.
 
-# Files
+Settings lets you change the OS accent color and reset the virtual Blazin Drive filing system.
 
-# Terminal — Simulated shell with basic commands (`help`, `date`, `whoami`, `apps`, `echo`, `clear`)
+Blazin Music provides an in-OS music player with a track library, search, playback controls, and support for loading local audio files such as MP3 and OGG files. Music plays inside the application instead of redirecting the user to another website.
 
-# Calendar 
+Blazin Arena is the built-in game. It has a controllable player avatar, WASD or arrow-key movement, mouse aiming, shooting, a dash ability, enemy waves, enemy health, player health, scoring, experience points, leveling, particles, stronger enemies, and a restart system.
 
-# Settings
+## Desktop
 
-# Blazin Music 
+Desktop shortcuts can be used to launch applications directly. The dock provides quick access to commonly used applications, while the launcher provides access to the complete application list.
 
-# Blazin Arena 
+Application windows can be moved, minimized, maximized, closed, and brought to the front when selected.
 
-# Custom Background — Drop `bg.jpg`, `bg.png`, `bg.webp`, or `bg.gif` in the folder to set your own wallpaper
+## Backgrounds
 
-# Quick Start
+Blazin OS can use a custom background image placed beside the HTML file. The OS looks for:
 
-# ```bash
+`bg.png`  
+`bg.jpg`  
+`bg.jpeg`  
+`bg.webp`  
+`bg.gif`
 
-# \# Just open index.html in your browser
+Using `bg.png` is recommended.
 
-# \# Or serve locally:
+## Storage
 
-# npx serve .
+Blazin OS uses browser `localStorage` to save Notes and the virtual Blazin Drive filesystem. This means the data is stored locally in the browser rather than on an online server.
 
-# \# Then visit http://localhost:3000
+## Running Blazin OS
 
-# ```
+Blazin OS does not require a server or installation. Open `BlazinOS.html` in a modern browser and the OS will start directly.
 
-# Custom Background
+## Project Test
 
-# Place any of these files in the project root:
+You can test the current web version of Blazin OS here:
 
-# `bg.jpg`
+https://blazinos.netlify.app/
 
-# `bg.png`
+## Developer Socials
 
-# `bg.jpeg`
+Instagram: https://instagram.com/blazinkiller_007
 
-# `bg.webp`
-
-# `bg.gif`
-
-# The OS will automatically detect and use the first one found.
-
-# Social
-
-# <p align="center">
-
-# &#x20; <a href="https://www.instagram.com/blazinkiller\_007/" target="\_blank" rel="noopener noreferrer">
-
-# &#x20;   <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge\&logo=instagram\&logoColor=white" alt="Instagram">
-
-# &#x20; </a>
-
-# &#x20; \&nbsp;
-
-# &#x20; <a href="https://discord.com/users/blazinkiller\_0981\_90402" target="\_blank" rel="noopener noreferrer">
-
-# &#x20;   <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge\&logo=discord\&logoColor=white" alt="Discord">
-
-# &#x20; </a>
-
-# &#x20; \&nbsp;
-
-# &#x20; <a href="https://github.com/Blazinkiller0981" target="\_blank" rel="noopener noreferrer">
-
-# &#x20;   <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge\&logo=github\&logoColor=white" alt="GitHub">
-
-# &#x20; </a>
-
-# </p>
-
-# <p align="center">
-
-# &#x20; <a href="https://www.instagram.com/blazinkiller\_007/" target="\_blank" rel="noopener noreferrer">Instagram</a>
-
-# &#x20; \&nbsp;|\&nbsp;
-
-# &#x20; <a href="https://discord.com/users/blazinkiller\_0981\_90402" target="\_blank" rel="noopener noreferrer">Discord</a>
-
-# &#x20; \&nbsp;|\&nbsp;
-
-# &#x20; <a href="https://github.com/Blazinkiller0981" target="\_blank" rel="noopener noreferrer">GitHub</a>
-
-# </p>
-
-# License
-
-# MIT — do whatever you want with it.
-
+Discord: https://discord.com/users/blazinkiller_0981_90402
